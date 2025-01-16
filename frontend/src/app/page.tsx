@@ -15,6 +15,7 @@ const Page = () => {
     title: "",
     description: "",
   });
+  const [show, setShow] = useState(false);
 
   // タスク一覧取得
   useEffect(() => {
@@ -50,6 +51,11 @@ const Page = () => {
         setNewTask({ title: "", description: "" });
       })
       .catch((error) => console.error("エラーが発生しました", error));
+  };
+
+  // タスク更新
+  const updateTask = () => {
+    setShow(!show);
   };
 
   // タスク削除
@@ -102,7 +108,10 @@ const Page = () => {
                   >
                     削除
                   </button>
-                  <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28">
+                  <button
+                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28"
+                    onClick={updateTask}
+                  >
                     編集
                   </button>
                 </div>
@@ -111,6 +120,36 @@ const Page = () => {
           </ul>
         )}
       </div>
+
+      {/* タスク編集 */}
+      {show && (
+        <div className="bg-slate-700 p-7 rounded-lg shadow-lg w-full">
+          <h2 className="text-xl font-bold text-white mb-4">タスク編集</h2>
+          <form className="flex flex-col gap-4">
+            <div>
+              <label className="block text-white mb-1">タイトル</label>
+              <input
+                type="text"
+                className="w-full p-2 rounded bg-gray-200 text-gray-900"
+              />
+            </div>
+            <div>
+              <label className="block text-white mb-1">説明</label>
+              <textarea className="w-full p-2 rounded bg-gray-200 text-gray-900" />
+            </div>
+            <div className="flex gap-4 flex-1">
+              <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28">
+                タスク更新
+              </button>
+              <button className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-28">
+                閉じる
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* 新しいタスクを作成 */}
       <div className="bg-slate-700 p-7 rounded-lg shadow-lg w-full mt-5">
         <h2 className="text-xl font-bold text-white mb-4">
           新しいタスクを作成
