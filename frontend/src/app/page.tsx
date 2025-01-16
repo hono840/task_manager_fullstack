@@ -50,6 +50,22 @@ const Page = () => {
       .catch((error) => console.error("エラーが発生しました", error));
   };
 
+  const deleteTask = (id: number) => {
+    fetch(`http://localhost:4000/tasks/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("タスクの削除に失敗しました");
+        }
+        setTasks((tasks) => tasks.filter((task) => task.id !== id));
+      })
+      .catch((error) => console.error("エラーが発生しました", error));
+  };
+
   return (
     <div className="flex flex-col gap-7 items-center justify-center pt-10 max-w-3xl mx-auto">
       <div className="flex flex-col gap-4 bg-slate-700 p-7 rounded-lg shadow-lg w-full">
@@ -77,7 +93,10 @@ const Page = () => {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <button className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-28">
+                  <button
+                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-28"
+                    onClick={() => deleteTask(task.id)}
+                  >
                     削除
                   </button>
                   <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28">
