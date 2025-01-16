@@ -16,6 +16,7 @@ const Page = () => {
     description: "",
   });
 
+  // タスク一覧取得
   useEffect(() => {
     fetch("http://localhost:4000/tasks")
       .then((response) => {
@@ -28,6 +29,7 @@ const Page = () => {
       .catch((error) => console.error("エラーが発生", error));
   }, []);
 
+  // タスク追加
   const addTask = (e: React.FormEvent) => {
     e.preventDefault();
     fetch("http://localhost:4000/tasks", {
@@ -50,6 +52,7 @@ const Page = () => {
       .catch((error) => console.error("エラーが発生しました", error));
   };
 
+  // タスク削除
   const deleteTask = (id: number) => {
     fetch(`http://localhost:4000/tasks/${id}`, {
       method: "DELETE",
