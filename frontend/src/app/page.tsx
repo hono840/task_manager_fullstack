@@ -59,18 +59,31 @@ const Page = () => {
         ) : (
           <ul className="space-y-4">
             {tasks.map((task) => (
-              <li key={task.id} className="bg-slate-800 p-4 rounded-lg shadow">
-                <h2 className="text-xl font-semibold text-white">
-                  {task.title}
-                </h2>
-                <p className="text-white">{task.description}</p>
-                <p
-                  className={`text-sm ${
-                    task.completed ? "text-green-400" : "text-red-400"
-                  }`}
-                >
-                  {task.completed ? "完了" : "未完了"}
-                </p>
+              <li
+                key={task.id}
+                className="bg-slate-800 p-4 rounded-lg shadow flex justify-between"
+              >
+                <div>
+                  <h2 className="text-xl font-semibold text-white">
+                    {task.title}
+                  </h2>
+                  <p className="text-white">{task.description}</p>
+                  <p
+                    className={`text-sm ${
+                      task.completed ? "text-green-400" : "text-red-400"
+                    }`}
+                  >
+                    {task.completed ? "完了" : "未完了"}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <button className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-28">
+                    削除
+                  </button>
+                  <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28">
+                    編集
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
