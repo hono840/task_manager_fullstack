@@ -60,6 +60,7 @@ const Page = () => {
 
   // タスク削除
   const deleteTask = (id: number) => {
+    setShow(false);
     fetch(`http://localhost:4000/tasks/${id}`, {
       method: "DELETE",
       headers: {
