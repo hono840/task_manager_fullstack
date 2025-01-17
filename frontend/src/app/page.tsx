@@ -16,6 +16,9 @@ const Page = () => {
     description: "",
   });
   const [show, setShow] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
   // タスク一覧取得
   useEffect(() => {
@@ -54,8 +57,30 @@ const Page = () => {
   };
 
   // タスク更新
-  const updateTask = () => {
-    setShow(true);
+  const updateTask = (
+    id: number,
+    updatedData: { title: string; description: string }
+  ) => {
+    fetch(`http://localhost:4000/tasks/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ task: updatedData }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("タスクの更新に失敗しました");
+        }
+        return response.json();
+      })
+      .then((updatedTask) => {
+        setTasks((tasks) =>
+          tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+        );
+        setShow(false);
+      })
+      .catch((error) => console.error("エラーが発生しました:", error));
   };
 
   // タスク削除
@@ -76,6 +101,14 @@ const Page = () => {
       .catch((error) => console.error("エラーが発生しました", error));
   };
 
+  const openEditTask = (task: Task) => {
+    setEditingTaskId(task.id);
+    setTitle(task.title);
+    setDescription(task.description);
+    setShow(true);
+  };
+
+  // 編集画面を閉じる
   const closeEditTask = () => {
     setShow(false);
   };
@@ -87,6 +120,7 @@ const Page = () => {
         {tasks.length === 0 ? (
           <p className="text-white">タスクがありません</p>
         ) : (
+          // タスク一覧
           <ul className="space-y-4">
             {tasks.map((task) => (
               <li
@@ -115,7 +149,7 @@ const Page = () => {
                   </button>
                   <button
                     className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28 font-bold"
-                    onClick={updateTask}
+                    onClick={() => openEditTask(task)}
                   >
                     編集
                   </button>
@@ -130,24 +164,40 @@ const Page = () => {
       {show && (
         <div className="bg-slate-700 p-7 rounded-lg shadow-lg w-full">
           <h2 className="text-xl font-bold text-white mb-4">タスク編集</h2>
-          <form className="flex flex-col gap-4">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (editingTaskId !== null) {
+                updateTask(editingTaskId, {
+                  title: title,
+                  description: description,
+                });
+              }
+            }}
+          >
             <div>
               <label className="block text-white mb-1">タイトル</label>
               <input
                 type="text"
                 className="w-full p-2 rounded bg-gray-200 text-gray-900"
-                onChange={(e) => console.log(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
             <div>
               <label className="block text-white mb-1">説明</label>
               <textarea
                 className="w-full p-2 rounded bg-gray-200 text-gray-900"
-                onChange={(e) => console.log(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div className="flex gap-4 flex-1">
-              <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28 font-bold">
+              <button
+                className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28 font-bold"
+                type="submit"
+              >
                 タスク更新
               </button>
               <button
