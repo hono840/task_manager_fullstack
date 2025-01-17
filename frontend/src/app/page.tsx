@@ -55,7 +55,7 @@ const Page = () => {
 
   // タスク更新
   const updateTask = () => {
-    setShow(!show);
+    setShow(true);
   };
 
   // タスク削除
@@ -74,6 +74,10 @@ const Page = () => {
         setTasks((tasks) => tasks.filter((task) => task.id !== id));
       })
       .catch((error) => console.error("エラーが発生しました", error));
+  };
+
+  const closeEditTask = () => {
+    setShow(false);
   };
 
   return (
@@ -104,13 +108,13 @@ const Page = () => {
                 </div>
                 <div className="flex flex-col gap-2">
                   <button
-                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-28"
+                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-28 font-bold"
                     onClick={() => deleteTask(task.id)}
                   >
                     削除
                   </button>
                   <button
-                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28"
+                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28 font-bold"
                     onClick={updateTask}
                   >
                     編集
@@ -132,17 +136,24 @@ const Page = () => {
               <input
                 type="text"
                 className="w-full p-2 rounded bg-gray-200 text-gray-900"
+                onChange={(e) => console.log(e.target.value)}
               />
             </div>
             <div>
               <label className="block text-white mb-1">説明</label>
-              <textarea className="w-full p-2 rounded bg-gray-200 text-gray-900" />
+              <textarea
+                className="w-full p-2 rounded bg-gray-200 text-gray-900"
+                onChange={(e) => console.log(e.target.value)}
+              />
             </div>
             <div className="flex gap-4 flex-1">
-              <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28">
+              <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-28 font-bold">
                 タスク更新
               </button>
-              <button className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-28">
+              <button
+                className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-28 font-bold"
+                onClick={closeEditTask}
+              >
                 閉じる
               </button>
             </div>
@@ -178,7 +189,7 @@ const Page = () => {
             />
           </div>
           <button
-            className="bg-green-500 text-white p-2 rounded hover:bg-green-600 disabled:bg-gray-500 disabled:hover:cursor-not-allowed"
+            className="bg-green-500 text-white p-2 rounded hover:bg-green-600 disabled:bg-gray-500 disabled:hover:cursor-not-allowed font-bold"
             type="submit"
             disabled={!newTask.title || !newTask.description}
           >
